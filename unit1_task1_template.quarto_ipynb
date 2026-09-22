@@ -1,0 +1,196 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Client Report - Exploring Names\"\n",
+        "subtitle: \"Unit 1 Task 1\"\n",
+        "author: \"Rayce O'Rullian\"\n",
+        "format:\n",
+        "  html:\n",
+        "    self-contained: true\n",
+        "    page-layout: full\n",
+        "    title-block-banner: true\n",
+        "    toc: true\n",
+        "    toc-depth: 3\n",
+        "    toc-location: body\n",
+        "    number-sections: false\n",
+        "    html-math-method: katex\n",
+        "    code-fold: true\n",
+        "    code-summary: \"Show the code\"\n",
+        "    code-overflow: wrap\n",
+        "    code-copy: hover\n",
+        "    code-tools:\n",
+        "        source: false\n",
+        "        toggle: true\n",
+        "        caption: See code\n",
+        "execute: \n",
+        "  warning: false\n",
+        "    \n",
+        "---"
+      ],
+      "id": "78664c62"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import polars as pl\n",
+        "import numpy as np\n",
+        "from lets_plot import *\n",
+        "\n",
+        "LetsPlot.setup_html(isolated_frame=True)"
+      ],
+      "id": "665d61f7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html\n",
+        "\n",
+        "# Include and execute your code here\n",
+        "df = pl.read_csv(\"names_year_csv.csv\")"
+      ],
+      "id": "9d1a4183",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 1\n",
+        "\n",
+        "__What was the earliest year that the name ‘Felisha’ was used?__\n",
+        "\n",
+        "The earliest recorded year that \"Felisha\" appeared was in 1964.\n",
+        "\n",
+        "_AI use reflection_\n",
+        "**Link** to the original chat:\n",
+        "**The Process** How exactly did you use the tool?\n",
+        "**The Impact**  How did using AI impact your learning?"
+      ],
+      "id": "424831c8"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q1\n",
+        "\n",
+        "df.filter(pl.col(\"name\") == \"Felisha\").select(\"year\").min()"
+      ],
+      "id": "59717636",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 2\n",
+        "\n",
+        "__What year had the most babies named 'David'? How many babies were named 'David' that year?__\n",
+        "\n",
+        "The most babies that were named \"David\" in one year 86389, and that was in 1955.\n",
+        "\n",
+        "_AI use reflection_\n",
+        "**Link** to the original chat:\n",
+        "**The Process** How exactly did you use the tool?\n",
+        "**The Impact**  How did using AI impact your learning?"
+      ],
+      "id": "88146faa"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q2\n",
+        "\n",
+        "df.filter(pl.col(\"name\") == \"David\").sort(\"Total\", descending=True).head(1)"
+      ],
+      "id": "8bfaafe1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 3\n",
+        "\n",
+        "__What year did your name hit its peak? How many babies were named your name in that year?__\n",
+        "\n",
+        "In 2012, there were 24 babies named Rayce.\n",
+        "\n",
+        "_AI use reflection_\n",
+        "**Link** to the original chat:\n",
+        "**The Process** How exactly did you use the tool?\n",
+        "**The Impact**  How did using AI impact your learning?"
+      ],
+      "id": "36e617be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q3\n",
+        "df.filter(pl.col(\"name\") == \"Rayce\").sort(\"Total\", descending=True).head(1)"
+      ],
+      "id": "e05e6044",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 4\n",
+        "\n",
+        "__In the most recent year, what was the most common female name in Utah?__ \n",
+        "\n",
+        "The most common female name in Utah, in the latest recorded year (2024), was Olivia, with 14718 results.\n",
+        "\n",
+        "_AI use reflection_\n",
+        "**Link** to the original chat:\n",
+        "**The Process** How exactly did you use the tool?\n",
+        "**The Impact**  How did using AI impact your learning?"
+      ],
+      "id": "200267ca"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q5\n",
+        "df.filter(pl.col(\"year\") == pl.col(\"year\").max()).sort(\"UT\", descending=True).head(10)"
+      ],
+      "id": "dcccaafe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---"
+      ],
+      "id": "4e2f9fbd"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\orull\\AppData\\Local\\Python\\pythoncore-3.14-64\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
