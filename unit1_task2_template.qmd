@@ -1,0 +1,115 @@
+---
+title: "Client Report - What's in a Name?"
+subtitle: "Unit 1 Task 2"
+author: "Rayce O'Rullian"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
+
+# Include and execute your code here
+df = pl.read_csv("names_year_csv.csv")
+```
+
+```{python}
+
+# you can divide this mess into variables for easier writing.
+ggplot(df.filter(pl.col("name") == "Ryan").select(pl.col("name"), pl.col("year"), pl.col("Total")), aes(x = "year", y = "Total")) + geom_line(color = "blue") + labs(x = "Year", y = "Number of Babies", title = "Babies named Ryan Over Time") + scale_x_continuous(format = "d")
+```
+
+## QUESTION 1
+
+<!-- Make sure at least one of your charts includes reference marks!! -->
+
+__How does your name at your birth year compare to its use historically? Your must provide a chart. The years labels on your charts should not include a comma.__ 
+
+_My name was used at one of the lowest parts of the graph, coming in at only 7 uses. The usage of my name is rare. It gains and loses popularity constantly, but peaks at 2012, with 24 uses._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Q1
+labels = labs(x = "Year", y = "Number of Babies", title = "Babies named Rayce Over Time")
+line_color = geom_line(color = "green")
+no_commas = scale_x_continuous(format = "d")
+vertical_line = geom_vline(xintercept = 2001, color = "orange")
+
+ggplot(df.filter(pl.col("name") == "Rayce").select(pl.col("name"), pl.col("year"), pl.col("Total")), aes(x = "year", y = "Total")) + line_color + no_commas + labels + vertical_line
+```
+
+
+## QUESTION 2
+
+__Think of a unique name from a famous movie. Plot the usage of that name and see how changes line up with the movie release. Does it look like the movie had an effect on usage?__  
+
+_I chose the name "Fiona" from the movie Shrek. Shrek came out in 2001. It appears that Fiona was already increasing in popularity even before the movie's release, and it continued to increase after the movie too. I'd say that Shrek very likely had an influence on this name's usage._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Q2
+
+labels = labs(x = "Year", y = "Number of Babies", title = "All the Fiona")
+line_color = geom_line(color = "purple")
+no_commas = scale_x_continuous(format = "d")
+vertical_line = geom_vline(xintercept = 2001, color = "green")
+
+ggplot(df.filter(pl.col("name") == "Fiona").select(pl.col("name"), pl.col("year"), pl.col("Total")), aes(x = "year", y = "Total")) + line_color + no_commas + labels + vertical_line
+```
+
+## QUESTION 3
+
+__Mary, Martha, Peter, and Paul are all Christian names. From 1920 - 2000, compare the name usage of each of the four names in a single chart. What trends do you notice?__  
+
+_Mary used to be the most used name, followed by Paul. Martha and Peter were lower, and somewhat equivalent in popularity. Then there was a turning point for all four names by about 1950. Martha started going down while the other three spiked up a little, right before all of them dropped off drastically._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Q3
+no_commas = scale_x_continuous(format = "d")
+
+names = df.filter((pl.col("year") >= 1920) & (pl.col("year") <= 2000) & (pl.col("name").is_in(["Mary", "Martha", "Peter", "Paul"])))
+
+ggplot(names, aes(x="year", y="Total", color="name")) + geom_line() + no_commas
+
+```
+<!-- Make sure at least one of your charts includes reference marks!! -->
