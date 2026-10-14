@@ -1,0 +1,156 @@
+---
+title: "Client Report - Missing values"
+subtitle: "Unit 2 Task 3"
+author: "Rayce O'Rullian"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import requests #new for reading in JSON
+import io       #new for reading in JSON
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+url = "https://raw.githubusercontent.com/byuidatascience/data4missing/master/data-raw/flights_missing/flights_missing.json"
+response = requests.get(url)
+df = pl.read_json(io.BytesIO(response.content))
+```
+
+## QUESTION 1
+
+1. __Convert values to missing__ Start with a fresh copy of the flights dataset by reading it in from the link provided above (as opposed to starting with the dataset you ended with in the last assignment). Identify data values that are problematic, non-sense or impossible and change them to be missing. In your report include one record example (one row) from your clean data, in the raw JSON format. Your example should display at least one missing value so that we can verify it was done correctly. (Note: JSON will convert NaN's to null). Describe your process for finding values that needed to be changed, and how you changed them.
+
+_I tried using the "null_count()" method to find how many values in each column were null. I also looked at the first ten rows and noticed weird values like 1500+ and -999 and an an unnamed airport. So I used some .when and .then statements to turn them into "None"._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+df.null_count()
+df_weird_values = df.with_columns(
+    pl.when(pl.col("airport_name") == "")
+    .then(None)
+    .otherwise(pl.col("airport_name"))
+    .alias("airport_name"),
+
+    pl.when(pl.col("num_of_delays_late_aircraft") == -999)
+    .then(None)
+    .otherwise(pl.col("num_of_delays_late_aircraft"))
+    .alias("num_of_delays_late_aircraft"),
+
+    pl.when(pl.col("num_of_delays_carrier") == "1500+")
+    .then(None)
+    .otherwise(pl.col("num_of_delays_carrier"))
+    .alias("num_of_delays_carrier")
+)
+df_weird_values[0].write_json()
+```
+
+## QUESTION 2
+
+2. __Filling in missing data__ For all the "minutes_delayed" columns, fill in any missing values with the median of that column. For the "num_of" columns, fill in missing values with that column's mean.
+
+_Nothing to write/report for this question_
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+
+# This is all I can think of. I know it's repetitive. 
+# It wouldn't let me use (strategy = "median") so I used ".median()" instead.
+df_fill = df_weird_values.with_columns(
+    pl.col("minutes_delayed_carrier").fill_null(
+        pl.col("minutes_delayed_carrier").median()
+    ),
+    pl.col("minutes_delayed_late_aircraft").fill_null(
+        pl.col("minutes_delayed_late_aircraft").median()
+    ),
+    pl.col("minutes_delayed_nas").fill_null(
+        pl.col("minutes_delayed_nas").median()
+    ),
+    pl.col("minutes_delayed_security").fill_null(
+        pl.col("minutes_delayed_security").median()
+    ),
+    pl.col("minutes_delayed_weather").fill_null(
+        pl.col("minutes_delayed_weather").median()
+    ),
+    pl.col("minutes_delayed_total").fill_null(
+        pl.col("minutes_delayed_total").median()
+    )
+)
+
+df_fill = df_fill.with_columns(
+    pl.col("num_of_flights_total").fill_null(
+        pl.col("num_of_flights_total").mean()
+    ),
+    pl.col("num_of_delays_late_aircraft").fill_null(
+        pl.col("num_of_delays_late_aircraft").mean()
+    ),
+    pl.col("num_of_delays_nas").fill_null(
+        pl.col("num_of_delays_nas").mean()
+    ),
+    pl.col("num_of_delays_security").fill_null(
+        pl.col("num_of_delays_security").mean()
+    ),
+    pl.col("num_of_delays_weather").fill_null(
+        pl.col("num_of_delays_weather").mean()
+    ),
+    pl.col("num_of_delays_total").fill_null(
+        pl.col("num_of_delays_total").mean()
+    )
+)
+df_fill
+
+```
+
+## QUESTION 3
+ 
+3. __Display a histogram for num_of_delays_carrier and for minutes_delayed_nas (2 separate histograms in total). Comment on the shape of each one. Also report the mean of each of these columns now that missing values have been filled in.__
+
+_The mean for num of delays carrier looks to be around 29. There seems to be more reported delays when the number of carriers is greater. The larger the carrier, the fewer delays.As for minutes delayed nas, the results immediately spike at 342 minutes delayed, but quickly lower into the single digits._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Include and execute your code here
+visual1 = ggplot(df_fill, aes(x="num_of_delays_carrier")) + geom_histogram()
+visual2 = ggplot(df_fill, aes(x="minutes_delayed_nas")) + geom_histogram()
+
+visual1
+visual2
+
+```
