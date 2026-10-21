@@ -92,7 +92,20 @@ _AI use reflection_
 
 ```{python}
 # Include and execute your code here
-df.columns
+numeric_columns = [c for c in Season.columns if c.startswith("num_of_")]
+
+filter_out_weird = Season.filter(
+  (pl.col("num_of_delays_carrier") != "1500+"),
+  (numeric_columns != -999)
+  )
+
+filter_out_weird = filter_out_weird.with_columns(pl.col("num_of_delays_carrier").cast(pl.Int64))
+
+fun_columns = [c for c in filter_out_weird.columns if c.startswith("num_of_")]
+
+filter_out_weird = filter_out_weird.with_columns(pl.col(fun_columns) / 1000)
+
+filter_out_weird
 ```
 
 ## QUESTION 3
@@ -112,7 +125,13 @@ _AI use reflection_
 
 ```{python}
 # Include and execute your code here
+pizza = filter_out_weird.with_columns(
+  ((pl.col("num_of_delays_weather")) +
+  (pl.col("num_of_delays_late_aircraft") * 0.30) +
+  (pl.when(pl.col("month").is_in(["April", "May", "June", "July", "August"])).then(pl.col("num_of_delays_nas") * 0.40).otherwise(pl.col("num_of_delays_nas") * 0.65))).alias("Delayed Flights")
+)
 
+pizza
 
 ```
 
@@ -120,7 +139,7 @@ _AI use reflection_
 
 1. __Using the new weather variable calculated above, create a boxplot showing the distribution of flights delayed by weather for each season. Describe what you learn from this graph.__    
 
-_Describe your results and analysis here_
+_Winter has the highest median of delayed flights (at almost 1000). This is understandable because of snow, or because people would more likely want to get away for the winter season, and more flights means more delays. Aside from the rare unknown values, Spring has the lowest number of delays (sitting at 657)._
 
 _AI use reflection_
 **Link** to the original chat:
@@ -130,5 +149,5 @@ _AI use reflection_
 ```{python}
 # Include and execute your code here
 
-
+ggplot(pizza, aes(x="season", y="Delayed Flights")) + geom_boxplot()
 ```
