@@ -48,7 +48,7 @@ con = sqlite3.connect(sqlite_file)
 
 __Write an SQL query that pulls in the the salaries table and the collegeplaying table (and any other tables you might need) and store them in polars dataframes. In Python Polars, combine the dataframes to create a list of baseball players who attended BYU-Idaho. The new table should contain five columns: playerID, schoolID, salary, yearID and teamID associated with each salary.__
 
-_Interestingly, out of the 31 rows that this returns, I only see two players. They both have gone to BYUI, and I can see that with each year, there are frequent team changes and salary changes._
+_I made sure to only select unique player IDs so there's no duplicate rows. Now I have 16 rows featuring the same two players again and again, but this is because the same player can be found on various different teams, with varying salaries, and playing across multiple years._
 
 _AI use reflection_
 **Link** to the original chat:
@@ -59,12 +59,12 @@ _AI use reflection_
 # Include and execute your code here
 
 salary = """
-        SELECT playerID, salary, teamID
+        SELECT playerID, salary, teamID, yearID
         FROM salaries;
         """
 
 play = """
-      SELECT playerID, schoolID, yearID
+      SELECT playerID, schoolID
       FROM collegeplaying;
       """
 
@@ -72,18 +72,24 @@ players = pl.read_database(play, con)
 
 salary = pl.read_database(salary, con)
 
-joined_thingy = salary.join(players, on="playerID", how="full")
-
-joined_thingy = joined_thingy.filter(pl.col("schoolID") == "idbyuid")
+players = players.unique("playerID")
 
 ```
 
+
+```{python}
+joined = players.join(salary, on="playerID", how="left")
+
+joined = joined.filter(pl.col("schoolID") == "idbyuid")
+
+joined
+```
 
 ## QUESTION 2
 
 1. Pick any two baseball teams and compare them using a metric of your choice (average salary, home runs, number of wins, etc). Be creative! Write an SQL query to read in the table(s) you need, then use polars to manipulate the data. Finally, make a graph using Lets-Plot to visualize the comparison. What do you learn?
 
-_I thought I'd compare the total number of at-bats between the Washington Olympics and the Cleveland Forest Citys. In general, Washington has more at-bats (with 162), while Cleveland is at 46. Although this could be because Washington has simply had more games._
+_I chose to compare Washington Olympics versus Cleveland Forest Citys, and I was comparing the number of at-bats they both had. Side by side, you can see that Cleveland has had more total at-bats, winning over Washington by 411._
 
 _AI use reflection_
 **Link** to the original chat:
@@ -108,16 +114,19 @@ wo = pl.read_database(washington_olympics, con)
 
 cfc = pl.read_database(cleveland_forest_citys, con)
 
-wo.select(pl.col("AB").sum())
-cfc.select(pl.col("AB").sum())
+wo = wo.group_by("teamID").agg(pl.col("AB").sum())
+
+cfc = cfc.group_by("teamID").agg(pl.col("AB").sum())
 
 both_teams = pl.concat([wo, cfc])
 
-ggplot(both_teams, aes(x="teamID", y="AB")) + geom_bar(stat="identity") + labs(
+yipee = ggplot(both_teams, aes(x="teamID", y="AB")) + geom_bar(stat="identity") + labs(
         title="Team At-Bats",
         x="Team",
         y="Total At-Bats"
     )
+
+yipee
 
 ```
 

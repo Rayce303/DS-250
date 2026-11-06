@@ -2260,7 +2260,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   <li><a href="#question-2" id="toc-question-2">QUESTION 2</a></li>
   </ul>
 </nav>
-<div id="147a3d7c" class="cell" data-execution_count="1">
+<div id="3fcb0b5b" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
@@ -2272,7 +2272,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>LetsPlot.setup_html(isolated_frame<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="a5b5cc95" class="cell" data-execution_count="2">
+<div id="80b7e0a5" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&quot;https://raw.githubusercontent.com/byuidatascience/data4missing/master/data-raw/flights_missing/flights_missing.json&quot;</span></span>
@@ -2287,7 +2287,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </ol>
 <p><em>I tried using the “null_count()” method to find how many values in each column were null. I also looked at the first ten rows and noticed weird values like 1500+ and -999 and an an unnamed airport. So I used some .when and .then statements to turn them into “None”.</em></p>
 <p><em>AI use reflection</em> <strong>Link</strong> to the original chat: <strong>The Process</strong> How exactly did you use the tool? <strong>The Impact</strong> How did using AI impact your learning?</p>
-<div id="62ed04bb" class="cell" data-execution_count="3">
+<div id="08060f7b" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.null_count()</span>
@@ -2304,13 +2304,13 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    pl.when(pl.col(<span class="st">&quot;num_of_delays_carrier&quot;</span>) <span class="op">==</span> <span class="st">&quot;1500+&quot;</span>)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    .then(<span class="va">None</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    .otherwise(pl.col(<span class="st">&quot;num_of_delays_carrier&quot;</span>))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    .otherwise(pl.col(<span class="st">&quot;num_of_delays_carrier&quot;</span>)).cast(pl.Int64)</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    .alias(<span class="st">&quot;num_of_delays_carrier&quot;</span>)</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>df_weird_values[<span class="dv">0</span>].write_json()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_weird_values[<span class="dv">0</span>].write_json())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>&#39;[{&quot;airport_code&quot;:&quot;ATL&quot;,&quot;airport_name&quot;:&quot;Atlanta, GA: Hartsfield-Jackson Atlanta International&quot;,&quot;month&quot;:&quot;January&quot;,&quot;year&quot;:2005,&quot;num_of_flights_total&quot;:35048,&quot;num_of_delays_carrier&quot;:null,&quot;num_of_delays_late_aircraft&quot;:null,&quot;num_of_delays_nas&quot;:4598,&quot;num_of_delays_security&quot;:10,&quot;num_of_delays_weather&quot;:448,&quot;num_of_delays_total&quot;:8355,&quot;minutes_delayed_carrier&quot;:116423,&quot;minutes_delayed_late_aircraft&quot;:104415,&quot;minutes_delayed_nas&quot;:207467,&quot;minutes_delayed_security&quot;:297,&quot;minutes_delayed_weather&quot;:36931,&quot;minutes_delayed_total&quot;:465533}]&#39;</code></pre>
+<div class="cell-output cell-output-stdout">
+<pre><code>[{&quot;airport_code&quot;:&quot;ATL&quot;,&quot;airport_name&quot;:&quot;Atlanta, GA: Hartsfield-Jackson Atlanta International&quot;,&quot;month&quot;:&quot;January&quot;,&quot;year&quot;:2005,&quot;num_of_flights_total&quot;:35048,&quot;num_of_delays_carrier&quot;:null,&quot;num_of_delays_late_aircraft&quot;:null,&quot;num_of_delays_nas&quot;:4598,&quot;num_of_delays_security&quot;:10,&quot;num_of_delays_weather&quot;:448,&quot;num_of_delays_total&quot;:8355,&quot;minutes_delayed_carrier&quot;:116423,&quot;minutes_delayed_late_aircraft&quot;:104415,&quot;minutes_delayed_nas&quot;:207467,&quot;minutes_delayed_security&quot;:297,&quot;minutes_delayed_weather&quot;:36931,&quot;minutes_delayed_total&quot;:465533}]</code></pre>
 </div>
 </div>
 </section>
@@ -2321,53 +2321,54 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </ol>
 <p><em>Nothing to write/report for this question</em></p>
 <p><em>AI use reflection</em> <strong>Link</strong> to the original chat: <strong>The Process</strong> How exactly did you use the tool? <strong>The Impact</strong> How did using AI impact your learning?</p>
-<div id="29eaec61" class="cell" data-execution_count="4">
+<div id="d0d492d5" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is all I can think of. I know it&#39;s repetitive. </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It wouldn&#39;t let me use (strategy = &quot;median&quot;) so I used &quot;.median()&quot; instead.</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df_fill <span class="op">=</span> df_weird_values.with_columns(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_carrier&quot;</span>).fill_null(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_carrier&quot;</span>).median()</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_late_aircraft&quot;</span>).fill_null(</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_late_aircraft&quot;</span>).median()</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_nas&quot;</span>).fill_null(</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_nas&quot;</span>).median()</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_security&quot;</span>).fill_null(</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_security&quot;</span>).median()</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_weather&quot;</span>).fill_null(</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_weather&quot;</span>).median()</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_total&quot;</span>).fill_null(</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_total&quot;</span>).median()</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>df_fill <span class="op">=</span> df_fill.with_columns(</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>).fill_null(</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>).mean()</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_late_aircraft&quot;</span>).fill_null(</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_late_aircraft&quot;</span>).mean()</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_nas&quot;</span>).fill_null(</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_nas&quot;</span>).mean()</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_security&quot;</span>).fill_null(</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_security&quot;</span>).mean()</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_weather&quot;</span>).fill_null(</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_weather&quot;</span>).mean()</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_total&quot;</span>).fill_null(</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_total&quot;</span>).mean()</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>df_fill</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_fill <span class="op">=</span> df_weird_values.with_columns(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_carrier&quot;</span>).fill_null(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_carrier&quot;</span>).median()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_late_aircraft&quot;</span>).fill_null(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_late_aircraft&quot;</span>).median()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_nas&quot;</span>).fill_null(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_nas&quot;</span>).median()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_security&quot;</span>).fill_null(</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_security&quot;</span>).median()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_weather&quot;</span>).fill_null(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_weather&quot;</span>).median()</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;minutes_delayed_total&quot;</span>).fill_null(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;minutes_delayed_total&quot;</span>).median()</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>df_fill <span class="op">=</span> df_fill.with_columns(</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>).fill_null(</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>).mean()</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_late_aircraft&quot;</span>).fill_null(</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_late_aircraft&quot;</span>).mean()</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_nas&quot;</span>).fill_null(</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_nas&quot;</span>).mean()</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_security&quot;</span>).fill_null(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_security&quot;</span>).mean()</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_weather&quot;</span>).fill_null(</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_weather&quot;</span>).mean()</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_total&quot;</span>).fill_null(</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_total&quot;</span>).mean()</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_delays_carrier&quot;</span>).fill_null(</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        pl.col(<span class="st">&quot;num_of_delays_carrier&quot;</span>).mean()</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>df_fill</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div><style>
@@ -2405,7 +2406,7 @@ white-space: pre-wrap;
 <td>str</td>
 <td>i64</td>
 <td>f64</td>
-<td>str</td>
+<td>f64</td>
 <td>f64</td>
 <td>f64</td>
 <td>f64</td>
@@ -2426,7 +2427,7 @@ white-space: pre-wrap;
 <td>&quot;January&quot;</td>
 <td>2005</td>
 <td>35048.0</td>
-<td>null</td>
+<td>691.294947</td>
 <td>1109.104072</td>
 <td>4598.0</td>
 <td>10.0</td>
@@ -2445,7 +2446,7 @@ white-space: pre-wrap;
 <td>&quot;January&quot;</td>
 <td>2005</td>
 <td>12687.0</td>
-<td>&quot;1041&quot;</td>
+<td>1041.0</td>
 <td>928.0</td>
 <td>935.0</td>
 <td>11.0</td>
@@ -2464,7 +2465,7 @@ white-space: pre-wrap;
 <td>&quot;January&quot;</td>
 <td>2005</td>
 <td>12381.0</td>
-<td>&quot;414&quot;</td>
+<td>414.0</td>
 <td>1058.0</td>
 <td>895.0</td>
 <td>4.0</td>
@@ -2483,7 +2484,7 @@ white-space: pre-wrap;
 <td>&quot;January&quot;</td>
 <td>2005</td>
 <td>28194.0</td>
-<td>&quot;1197&quot;</td>
+<td>1197.0</td>
 <td>2255.0</td>
 <td>5415.0</td>
 <td>5.0</td>
@@ -2502,7 +2503,7 @@ white-space: pre-wrap;
 <td>&quot;January&quot;</td>
 <td>2005</td>
 <td>7283.0</td>
-<td>&quot;572&quot;</td>
+<td>572.0</td>
 <td>680.0</td>
 <td>638.0</td>
 <td>7.0</td>
@@ -2540,7 +2541,7 @@ white-space: pre-wrap;
 <td>&quot;December&quot;</td>
 <td>2015</td>
 <td>2799.0</td>
-<td>&quot;182&quot;</td>
+<td>182.0</td>
 <td>183.0</td>
 <td>61.0</td>
 <td>0.0</td>
@@ -2559,7 +2560,7 @@ white-space: pre-wrap;
 <td>&quot;December&quot;</td>
 <td>2015</td>
 <td>25568.0</td>
-<td>&quot;923&quot;</td>
+<td>923.0</td>
 <td>1755.0</td>
 <td>1364.0</td>
 <td>11.0</td>
@@ -2578,7 +2579,7 @@ white-space: pre-wrap;
 <td>&quot;n/a&quot;</td>
 <td>2015</td>
 <td>6231.0</td>
-<td>&quot;480&quot;</td>
+<td>480.0</td>
 <td>606.0</td>
 <td>256.0</td>
 <td>5.0</td>
@@ -2597,7 +2598,7 @@ white-space: pre-wrap;
 <td>&quot;December&quot;</td>
 <td>2015</td>
 <td>13833.0</td>
-<td>&quot;757&quot;</td>
+<td>757.0</td>
 <td>1180.0</td>
 <td>2372.0</td>
 <td>9.0</td>
@@ -2616,7 +2617,7 @@ white-space: pre-wrap;
 <td>&quot;December&quot;</td>
 <td>2015</td>
 <td>8804.0</td>
-<td>&quot;483&quot;</td>
+<td>483.0</td>
 <td>796.0</td>
 <td>404.0</td>
 <td>5.0</td>
@@ -2634,8 +2635,8 @@ white-space: pre-wrap;
 </div>
 </div>
 </div>
-<p><strong>DESCRIPTION</strong> <em>Late aircrafts was the leading reason for delays, with a 7% proportion (between delays and number of flights. This means 7% of flights are delayed because the plane is late). Carrier has a lesser proportion, at almost 4%, and Security has a delay proportion, but it’s so low it’s almost zero. It’s at about 0.003%.</em></p>
-<div id="7f1d72d3" class="cell" data-execution_count="5">
+<p><strong>DESCRIPTION</strong> <em>Late aircrafts was the leading reason for delays, with the San Fransisco airport being the most notable airport for delays. The Atlanta airport however, has the least proportion in both carriers and late aircrafts. In all of these cases though, security-related delays are so minimal that they don’t visibly show up on this graph.</em></p>
+<div id="c732d968" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_fill <span class="op">=</span> df_fill.with_columns(</span>
@@ -2663,7 +2664,7 @@ white-space: pre-wrap;
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>df_totals <span class="op">=</span> df_long.group_by(<span class="st">&quot;reason&quot;</span>).agg(</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>df_totals <span class="op">=</span> df_long.group_by(<span class="st">&quot;airport_code&quot;</span>, <span class="st">&quot;reason&quot;</span>).agg(</span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;delays&quot;</span>).<span class="bu">sum</span>(),</span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>).<span class="bu">sum</span>()</span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -2683,37 +2684,13 @@ white-space: pre-wrap;
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    })</span>
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>df_airport_totals <span class="op">=</span> df_long.group_by(</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&quot;airport_code&quot;</span>, <span class="st">&quot;reason&quot;</span>]</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>).agg(</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;delays&quot;</span>).<span class="bu">sum</span>(),</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>).<span class="bu">sum</span>()</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>df_airport_totals <span class="op">=</span> df_airport_totals.with_columns(</span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">&quot;delays&quot;</span>) <span class="op">/</span> pl.col(<span class="st">&quot;num_of_flights_total&quot;</span>))</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    .alias(<span class="st">&quot;proportion&quot;</span>)</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>df_wide <span class="op">=</span> df_airport_totals.pivot(</span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span><span class="st">&quot;reason&quot;</span>,</span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span><span class="st">&quot;airport_code&quot;</span>,</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    values<span class="op">=</span><span class="st">&quot;proportion&quot;</span></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>df_chart <span class="op">=</span> df_airport_totals.sort([<span class="st">&quot;airport_code&quot;</span>, <span class="st">&quot;reason&quot;</span>])</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>woof <span class="op">=</span> ggplot(df_table, aes(x<span class="op">=</span><span class="st">&quot;reason&quot;</span>, y<span class="op">=</span><span class="st">&quot;proportion&quot;</span>)) <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">&quot;identity&quot;</span>) <span class="op">+</span> labs(</span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">&quot;Proportion of Flights Delayed by Reason&quot;</span>,</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">&quot;Delay Reason&quot;</span>,</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">&quot;Proportion of Flights&quot;</span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>woof</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>woof <span class="op">=</span> ggplot(df_table, aes(x<span class="op">=</span><span class="st">&quot;airport_code&quot;</span>, y<span class="op">=</span><span class="st">&quot;proportion&quot;</span>, fill <span class="op">=</span> <span class="st">&quot;reason&quot;</span>)) <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">&quot;identity&quot;</span>) <span class="op">+</span> labs(</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">&quot;Proportion of Flights Delayed by Reason&quot;</span>,</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">&quot;Delay Reason&quot;</span>,</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">&quot;Proportion of Flights&quot;</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>woof</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="5">
 
@@ -2725,7 +2702,7 @@ white-space: pre-wrap;
 //# sourceMappingURL=lets-plot.js.map</script>
    
    
-          <div id="W1GwIU"></div>
+          <div id="EiuE9e"></div>
    <script type="text/javascript" data-lets-plot-script="plot">
    
    (function() {
@@ -2750,22 +2727,27 @@ white-space: pre-wrap;
        };
    }
    
-   const containerDiv = document.getElementById("W1GwIU");
+   const containerDiv = document.getElementById("EiuE9e");
    let fig = null;
    
    function renderPlot() {
        if (fig === null) {
            const plotSpec = {
 "data":{
-"reason":["Security","Carrier","Late Aircraft"],
-"proportion":[3.262221552023734E-4,0.03833677269842482,0.06678314671544452]
+"airport_code":["DEN","IAD","DEN","SLC","DEN","IAD","SAN","SFO","ORD","SLC","ATL","ORD","IAD","SAN","SFO","SAN","ATL","ATL","SFO","ORD","SLC"],
+"reason":["Late Aircraft","Security","Carrier","Carrier","Security","Carrier","Late Aircraft","Late Aircraft","Security","Late Aircraft","Security","Carrier","Late Aircraft","Security","Security","Carrier","Late Aircraft","Carrier","Carrier","Late Aircraft","Security"],
+"proportion":[0.07160018361367301,3.194096558008669E-4,0.046552191868332767,0.04576366839011988,3.9180993916404863E-4,0.05608575209818089,0.07691897038988432,0.07613377520394618,2.3960497978089764E-4,0.056613870473085054,1.8803412243707573E-4,0.03734613302023467,0.07613810240132649,5.338493150386441E-4,4.273595982697148E-4,0.06224247217991376,0.05318267427102576,0.029754989055420858,0.05298584562937438,0.07509209400564844,6.177924217462932E-4]
 },
 "mapping":{
-"x":"reason",
-"y":"proportion"
+"x":"airport_code",
+"y":"proportion",
+"fill":"reason"
 },
 "data_meta":{
 "series_annotations":[{
+"type":"str",
+"column":"airport_code"
+},{
 "type":"str",
 "column":"reason"
 },{

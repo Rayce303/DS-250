@@ -68,10 +68,12 @@ df_weird_values = df.with_columns(
 
     pl.when(pl.col("num_of_delays_carrier") == "1500+")
     .then(None)
-    .otherwise(pl.col("num_of_delays_carrier"))
+    .otherwise(pl.col("num_of_delays_carrier")).cast(pl.Int64)
     .alias("num_of_delays_carrier")
 )
 df_weird_values[0].write_json()
+
+
 ```
 
 ## QUESTION 2
@@ -86,9 +88,6 @@ _AI use reflection_
 **The Impact**  How did using AI impact your learning?
 
 ```{python}
-
-# This is all I can think of. I know it's repetitive. 
-# It wouldn't let me use (strategy = "median") so I used ".median()" instead.
 df_fill = df_weird_values.with_columns(
     pl.col("minutes_delayed_carrier").fill_null(
         pl.col("minutes_delayed_carrier").median()
@@ -128,9 +127,12 @@ df_fill = df_fill.with_columns(
     ),
     pl.col("num_of_delays_total").fill_null(
         pl.col("num_of_delays_total").mean()
+    ),
+    pl.col("num_of_delays_carrier").fill_null(
+        pl.col("num_of_delays_carrier").mean()
     )
 )
-df_fill
+df_fill.describe()
 
 ```
 
@@ -151,6 +153,20 @@ visual1 = ggplot(df_fill, aes(x="num_of_delays_carrier")) + geom_histogram()
 visual2 = ggplot(df_fill, aes(x="minutes_delayed_nas")) + geom_histogram()
 
 visual1
-visual2
 
+
+```
+
+
+```{python}
+visual2
+```
+
+
+```{python}
+mean = df_fill.select(pl.col("num_of_delays_carrier").mean()).item()
+mean2 = df_fill.select(pl.col("minutes_delayed_nas").mean()).item()
+
+print("The mean of Numnber of Delays by Carrier is ", mean)
+print("The mean of Minutes delayed Nas is ", mean2)
 ```

@@ -1,0 +1,92 @@
+---
+title: "Client Report - Can You Predict That?"
+subtitle: "Unit 4 Task 1"
+author: "Rayce O'Rullian"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+
+```
+
+
+```{python}
+# import your data here using polars and the URL
+df = pl.read_csv("dwellings_ml.csv")
+
+```
+
+## QUESTION
+
+1. __Take time to get to know your data.__ Based on some initial exploration, identify 3 variables in the dataset you think will have strong predictive ability for determining if a house was built before 1980. Explain/justify the reasoning behind your guesses (for example with plots).
+
+_I chose three numeric stats (net price, finished basement, and living area). There's a lot of variation in two of these, but I got a lot of negative results for a finished basement. Also, by looking at the target (before1980), I'm getting a lot of zeroes there too, which means most (if not all) of this data shows houses built after 1980._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Optional: code you used to get to know your data
+learnAboutFeatures = df.select("netprice", "finbsmnt", "livearea")
+feature = df.select("numbaths", "condition_AVG", "netprice", "finbsmnt", "livearea", "basement", "stories", "condition_Fair", "condition_Excel", "nocars")
+target = df.select("before1980")
+
+```
+
+1. __Build a classification model labeling houses as being built “before 1980” or “during or after 1980”.__ Your goal is to reach or exceed 90% accuracy. Report your final model choice and any other model parameters you may have tweaked (train-test split ratio, tuning parameters, etc).  
+
+_My final model choice was the Random Forest Classifier. My accuracy started off very low, so the only tweaks I made was adding more and more features for the model to learn from. I think it was starved for information._
+
+```{python}
+# Include and execute your code here
+# Don't forget, you need another import statement to import the desired ML model from sklearn
+from sklearn.model_selection import train_test_split
+
+# You can name the 4 objects anything you like. These names are pretty standard though
+x_train, x_test, y_train, y_test = train_test_split(feature, target, test_size=0.1, random_state=20)
+
+# You can use these two commands to check the size of the 4 objects and verify they meet your expectations
+print(x_train.shape, y_train.shape)
+print(x_test.shape, y_test.shape)
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+rf_classifier = RandomForestClassifier() #define the model
+rf_classifier.fit(x_train, y_train) #fit the model on the training data
+
+rf_pred = rf_classifier.predict(x_test)
+
+print(classification_report(y_test, rf_pred))
+
+```
+

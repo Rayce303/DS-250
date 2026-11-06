@@ -68,10 +68,11 @@ df_weird_values = df.with_columns(
 
     pl.when(pl.col("num_of_delays_carrier") == "1500+")
     .then(None)
-    .otherwise(pl.col("num_of_delays_carrier"))
+    .otherwise(pl.col("num_of_delays_carrier")).cast(pl.Int64)
     .alias("num_of_delays_carrier")
 )
-df_weird_values[0].write_json()
+print(df_weird_values[0].write_json())
+
 ```
 
 ## QUESTION 2
@@ -87,8 +88,6 @@ _AI use reflection_
 
 ```{python}
 
-# This is all I can think of. I know it's repetitive. 
-# It wouldn't let me use (strategy = "median") so I used ".median()" instead.
 df_fill = df_weird_values.with_columns(
     pl.col("minutes_delayed_carrier").fill_null(
         pl.col("minutes_delayed_carrier").median()
@@ -128,6 +127,9 @@ df_fill = df_fill.with_columns(
     ),
     pl.col("num_of_delays_total").fill_null(
         pl.col("num_of_delays_total").mean()
+    ),
+    pl.col("num_of_delays_carrier").fill_null(
+        pl.col("num_of_delays_carrier").mean()
     )
 )
 df_fill
@@ -135,7 +137,7 @@ df_fill
 ```
 
 __DESCRIPTION__
-_Late aircrafts was the leading reason for delays, with a 7% proportion (between delays and number of flights. This means 7% of flights are delayed because the plane is late). Carrier has a lesser proportion, at almost 4%, and Security has a delay proportion, but it's so low it's almost zero. It's at about 0.003%._
+_Late aircrafts was the leading reason for delays, with the San Fransisco airport being the most notable airport for delays. The Atlanta airport however, has the least proportion in both carriers and late aircrafts. In all of these cases though, security-related delays are so minimal that they don't visibly show up on this graph._
 ```{python}
 
 df_fill = df_fill.with_columns(
@@ -163,7 +165,7 @@ df_long = df_reasons.unpivot(
 )
 
 
-df_totals = df_long.group_by("reason").agg(
+df_totals = df_long.group_by("airport_code", "reason").agg(
     pl.col("delays").sum(),
     pl.col("num_of_flights_total").sum()
 )
@@ -183,35 +185,11 @@ df_table = df_totals.with_columns(
     })
 )
 
-
-
-df_airport_totals = df_long.group_by(
-    ["airport_code", "reason"]
-).agg(
-    pl.col("delays").sum(),
-    pl.col("num_of_flights_total").sum()
-)
-
-df_airport_totals = df_airport_totals.with_columns(
-    (pl.col("delays") / pl.col("num_of_flights_total"))
-    .alias("proportion")
-)
-
-
-df_wide = df_airport_totals.pivot(
-    on="reason",
-    index="airport_code",
-    values="proportion"
-)
-
-df_chart = df_airport_totals.sort(["airport_code", "reason"])
-
-woof = ggplot(df_table, aes(x="reason", y="proportion")) + geom_bar(stat="identity") + labs(
+woof = ggplot(df_table, aes(x="airport_code", y="proportion", fill = "reason")) + geom_bar(stat="identity") + labs(
         title="Proportion of Flights Delayed by Reason",
         x="Delay Reason",
         y="Proportion of Flights"
     )
-
 
 woof
 
