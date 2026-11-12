@@ -1,0 +1,124 @@
+---
+title: "Client Report -How good is it, really?"
+subtitle: "Unit 4 Task 2"
+author: "Rayce O'Rullian"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+# import your data here using polars and the URL
+df = pl.read_csv("dwellings_ml.csv")
+
+```
+
+## QUESTION 1
+
+1. __Describe the quality of your classification model using 2-3 different evaluation metrics.__ You also need to explain how to define/interpret each of the evaluation metrics you use.  
+
+_My classification model is a Random Forest Classifier. It has a precision value of 77-82%. This metric is about how many times it can identify a house built before 1980. This model has a recall rate of 69-87%. This means that of the houses it chose, around 76% of them were actually built before 1980. F1-Score combines both precision and recall. This last metric shows that my model has around 76% accuracy._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+feature = df.select("netprice", "livearea", "stories")
+target = df.select("before1980")
+
+x_train, x_test, y_train, y_test = train_test_split(feature, target, test_size=0.1, random_state=20)
+
+print(x_train.shape, y_train.shape)
+print(x_test.shape, y_test.shape)
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+rf_classifier = RandomForestClassifier()
+rf_classifier.fit(x_train, y_train)
+
+rf_pred = rf_classifier.predict(x_test)
+
+print(classification_report(y_test, rf_pred))
+
+```
+
+
+## QUESTION 2
+
+1. __Justify your classification model by discussing the most important features selected by your model.__ This discussion should include a plot of permutation importance values for the most important features. Were there any features you thought would be importance but weren't?
+
+_I thought that the number of stories a house has, its living area, and its net price would all be useful features to include. I assumed that other features such as having a finished basement or an attached garage would help, but they didn't raise my accuracy score at all. As I experimented with features, some of them actually brought my score down. So I settled on these three._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Include and execute your code here
+
+from sklearn.inspection import permutation_importance
+
+result = permutation_importance(rf_classifier, x_test, y_test, n_repeats = 10, random_state = 42)
+
+perms_imp = pl.DataFrame({'importance': result.importances_mean, 'vars': x_train.columns})
+
+print(perms_imp.sort(['importance'], descending= True))
+```
+
+## QUESTION 3
+
+1. __For the 3 most important features, explain their relationship to the target variable. Use a plot to illustrate the relationship.__ (3 plots minimum)
+
+_Discussion here._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Include and execute your code here
+graph1 = ggplot(df, aes(x="yrbuilt", y="netprice")) + geom_line()
+graph2 = ggplot(df, aes(x="yrbuilt", y="livearea")) + geom_line()
+graph3 = ggplot(df, aes(x="yrbuilt", y="stories")) + geom_line()
+
+graph1
+graph2
+graph3
+
+```

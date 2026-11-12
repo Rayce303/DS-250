@@ -1,0 +1,119 @@
+---
+title: "Client Report - Show me!"
+subtitle: "Unit 4 Task 3"
+author: "Rayce O'Rullian"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+from sklearn.metrics import classification_report
+
+from sklearn.linear_model import SGDClassifier
+from sklearn.neighbors import NearestCentroid
+import numpy as np
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+# import your data here using polars and the URL
+df = pl.read_csv("dwellings_ml.csv")
+
+```
+
+## QUESTION 1
+
+1. __Repeat the classification exercise using 2 different algorithms/models. Explain the differences between the 3 models__ (your original one, and the 2 new ones for this task).
+
+_My original model was a random forest classifier. That one had an 80% accuracy overall. My two new models were SGDClassifier, and NearestCentroid. I can immediately see that SGD is focused on gathering as many possibilites as it can, since it has a recall of 100% at the precision's expense. It's only 61% accurate. The NearestCentroid model favors precision a little over recall, which boosts its f1-score and accuracy. Although, neither of these models seem as trustworthy as the random forest classifier._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Include and execute your code here
+
+feature = df.select("netprice", "livearea", "stories")
+target = df.select("before1980")
+x_train, x_test, y_train, y_test = train_test_split(feature, target, test_size=0.1, random_state=20)
+print(x_train.shape, y_train.shape)
+print(x_test.shape, y_test.shape)
+sgd = SGDClassifier()
+sgd.fit(x_train, y_train)
+sgd_pred = sgd.predict(x_test)
+print(classification_report(y_test, sgd_pred))
+
+nc = NearestCentroid()
+nc.fit(x_train, y_train)
+nc_pred = nc.predict(x_test)
+print(classification_report(y_test, nc_pred))
+```
+
+
+## QUESTION 2
+
+1. For each model (your original one, and the 2 new ones for this task), display the classification report and the permutation importances for the most important features.  Discuss which model you would recommend to the Client and why.
+
+_I would still recommend using the RandomForestClassifier. It beats the other two models in accuracy by at least 10%, and it does not pull every bit of data it can (including negative results). When making decisions, the RandomForestClassifier factors in all of its features (where each feature has a 10 - 13% influence). The other two models don't use all of their features to make a choice, which is what those zeroes mean._
+
+_AI use reflection_
+**Link** to the original chat:
+**The Process** How exactly did you use the tool?
+**The Impact**  How did using AI impact your learning?
+
+```{python}
+# Include and execute your code here
+from sklearn.inspection import permutation_importance
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+rf_classifier = RandomForestClassifier()
+rf_classifier.fit(x_train, y_train)
+rf_pred = rf_classifier.predict(x_test)
+
+# original
+result = permutation_importance(rf_classifier, x_test, y_test, n_repeats = 10, random_state = 42)
+perms_imp = pl.DataFrame({'importance': result.importances_mean, 'vars': x_train.columns})
+print("Original")
+print(perms_imp.sort(['importance'], descending= True))
+
+# SGD
+result = permutation_importance(sgd, x_test, y_test, n_repeats = 10, random_state = 42)
+perms_imp = pl.DataFrame({'importance': result.importances_mean, 'vars': x_train.columns})
+print("SGDClassifier")
+print(perms_imp.sort(['importance'], descending= True))
+
+# NearestCentroid
+result = permutation_importance(nc, x_test, y_test, n_repeats = 10, random_state = 42)
+perms_imp = pl.DataFrame({'importance': result.importances_mean, 'vars': x_train.columns})
+print("NearestCentroid")
+print(perms_imp.sort(['importance'], descending= True))
+
+```
